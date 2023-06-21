@@ -10,6 +10,7 @@ import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.geometry.Insets
 import javafx.geometry.Pos
+import javafx.scene.Cursor
 import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.image.Image
@@ -51,6 +52,7 @@ class GameView(NombresJoueur : Int, actualNumberPlayer : Int , id :Int,key :Int)
 
     private val diceKeptSection : VBox
     private val diceKeptTitle : Label
+    var countDice : Label
     val diceKept : GridPane
 
     private val dicePlayedSection : VBox
@@ -76,7 +78,7 @@ class GameView(NombresJoueur : Int, actualNumberPlayer : Int , id :Int,key :Int)
     private val playerPawnLabel : Label
 
     private val pickoSection : VBox
-    private val pickoMessage : Label
+    val pickoMessage : Label
     private val pickoImage : Image
 
 
@@ -144,7 +146,8 @@ class GameView(NombresJoueur : Int, actualNumberPlayer : Int , id :Int,key :Int)
             val pile = StackPane()
 
             // PlayerDotted
-            val dotted = Dotted(86.0, 165.0)
+            val dotted = Dotted(84.0, 163.0) //Dotted
+
             pile.children.add(dotted)
 
             player.children.addAll(playerName, pile)
@@ -169,6 +172,7 @@ class GameView(NombresJoueur : Int, actualNumberPlayer : Int , id :Int,key :Int)
         diceKeptTitle.textFill = Color.web("#FBFBF3")
         diceKeptTitle.padding = Insets(0.0, 0.0, 10.0, 0.0)
 
+
         diceKept = GridPane()
         diceKept.hgap = 8.0 // Espacement horizontal entre les colonnes
         diceKept.vgap = 8.0 // Espacement vertical entre les lignes
@@ -184,8 +188,9 @@ class GameView(NombresJoueur : Int, actualNumberPlayer : Int , id :Int,key :Int)
                 diceKept.add(stackPaneDice, col, row)
             }
         }
-
-        diceKeptSection.children.addAll(diceKeptTitle,diceKept)
+        countDice = Label("d")
+        //countDice
+        diceKeptSection.children.addAll(diceKeptTitle,countDice,diceKept)
 
         // dicePlayedSection
         dicePlayedSection = VBox()
@@ -249,6 +254,7 @@ class GameView(NombresJoueur : Int, actualNumberPlayer : Int , id :Int,key :Int)
 
         rollDiceBtn.graphic = StackPane(circleBtn, rollDiceImageView) // Add circle and image into BTN
         rollDiceBtn.style = "-fx-background-color: transparent;" // Remove default background
+        rollDiceBtn.cursor = Cursor.HAND
 
         rollDiceLabel = Label("Roll the dice")
         rollDiceLabel.textFill = Color.web("#FBFBF3")
@@ -330,7 +336,6 @@ class GameView(NombresJoueur : Int, actualNumberPlayer : Int , id :Int,key :Int)
     }
 
     fun UpDatePickominoPlayer(listePickomino: Array<Int>) {
-        val players: List<VBox> = playersList.childrenUnmodifiable.filterIsInstance<VBox>()
         val playerPawnValue = playerPawn?.value ?: 0 //Pour le joueur qui joue
 
         for (i in 0 until nombreJoueurs) {
@@ -344,27 +349,75 @@ class GameView(NombresJoueur : Int, actualNumberPlayer : Int , id :Int,key :Int)
 
                 if (listePickomino[i] != playerPawnValue) {
                     playerPawn = Pawn(listePickomino[i])
+
+                    // Supprimer les éléments existants avant l'ajout
+                    playerSpace.children.removeAt(1) // Remove index 1
+                    playerPawnSection.children.removeIf { it is StackPane }
+
                     playerPawnPile.children.add(playerPawn)
                     playerPawnSection.children.add(0, playerPawnPile)
                     playerSpace.children.add(1, playerPawnSection)
                     centerPart.bottom = playerSpace
                 }
+            } else if (actualNumberPlayer == i + 1 && listePickomino[i] == 0){
+                if (playerPawnPile.children.size == 2 && listePickomino[i] != playerPawnValue) {
+                    playerPawnPile.children.removeIf { it is Pawn }
+                }
+                // Supprimer les éléments existants avant l'ajout
+                playerSpace.children.removeAt(1) // Remove index 1
+                playerPawnSection.children.removeIf { it is StackPane }
+
+                playerPawnSection.children.add(0, playerPawnPile)
+                playerSpace.children.add(1, playerPawnSection)
+                centerPart.bottom = playerSpace
+
             }
             // Sinon c'est un autre joueur
             else if (currentPickominoValue != 0) {
                 val pileIndex = if (i > actualNumberPlayer - 1) i - 1 else i
-                val pile = players[pileIndex].children[1] as StackPane
+
+                val playerList = playersList as VBox//VBOX
+                val player = playersList.children[pileIndex] as VBox // VBox
+                val pile = player.children[1] as StackPane // StackPane
 
                 if (pile.children.size == 2) {
                     pile.children.removeIf { it is Pawn }
-                    val newPile = pile
-                    newPile.children.add(Pawn(currentPickominoValue))
-                    val parent = pile.parent as? Pane
-                    parent?.children?.add(newPile)
-
-                    val grandParent = parent?.parent as? Pane
-                    grandParent?.children?.add(newPile)
                 }
+
+                val newPawn = Pawn(listePickomino[i])
+
+                // Supprimer les éléments existannts avant l'ajout
+                player.children.removeAt(1)
+                playerList.children.removeAt(pileIndex)
+
+                // Rajouter les enfants
+                pile.children.add(1, newPawn)
+                player.children.add(1, pile)
+                playerList.children.add(pileIndex, player)
+
+                this.left = playersList
+
+            } else if (currentPickominoValue == 0){
+                val pileIndex = if (i > actualNumberPlayer - 1) i - 1 else i
+
+                val playerList = playersList as VBox//VBOX
+                val player = playersList.children[pileIndex] as VBox // VBox
+                val pile = player.children[1] as StackPane // StackPane
+
+                if (pile.children.size == 2) {
+                    pile.children.removeIf { it is Pawn }
+                }
+
+                // Supprimer les éléments existannts avant l'ajout
+                player.children.removeAt(1)
+                playerList.children.removeAt(pileIndex)
+
+                // Rajouter les enfants
+                player.children.add(1, pile)
+                playerList.children.add(pileIndex, player)
+
+                this.left = playersList
+
             }
         }
     }
@@ -438,7 +491,7 @@ class GameView(NombresJoueur : Int, actualNumberPlayer : Int , id :Int,key :Int)
 
     fun UpDateSelectionPickomino(number:Int,Contoleur : EventHandler<javafx.scene.input.MouseEvent>){
 
-        if (21 <= number && number <= 36) {
+        if (21 <= number) {
             var findit = false
             for (pickomino in pickominoSection.children) {
                 var picko = pickomino as Pawn

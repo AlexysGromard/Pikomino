@@ -6,6 +6,7 @@ import javafx.geometry.Pos
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
 import javafx.scene.paint.Color
+import javafx.scene.text.Font
 import view.components.SubTitle
 import view.components.Title
 import view.components.WhiteButton
@@ -18,7 +19,10 @@ class CreateOrJoin() : HomeCenter(false) {
 
     init {
         val title = Title()
-        val subTitle = SubTitle("Draw the worms from the dice !")
+        val labelQuote = Label("Draw the worms from the dice !")
+        labelQuote.setTextFill(Color.web("#FFFFFF"))
+        val HelveFont = Font.loadFont("file:src/main/kotlin/view/fonts/helvetica/Helvetica.ttf", 20.0)
+        labelQuote.font = HelveFont
 
 
         ButtonCreate = WhiteButton("Create a server")
@@ -29,7 +33,7 @@ class CreateOrJoin() : HomeCenter(false) {
 
         this.spacing = 20.0
 
-        this.children.addAll(title, subTitle, ButtonCreate, ButtonJoin)
+        this.children.addAll(title, labelQuote, ButtonCreate, ButtonJoin)
     }
 
     override fun fixeButton(listControleur: Array<EventHandler<ActionEvent>>) {

@@ -7,18 +7,19 @@
     -fx-background-color: transparent;
     -fx-border-color: white;
     -fx-border-radius: 50px;
-    -fx-border-width: 5px;
+    -fx-border-width: 3px;
     -fx-border-radius: 50px;
     -fx-pref-width: 400px;
     -fx-text-fill: #FFFFFF;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
+    -fx-padding: 0px 5px;
 }
 
 .combobox {
     -fx-padding: 10;
     -fx-pref-width: 500px;
-    }
+}
 
 .combo-box:hover {
     -fx-cursor: hand;
@@ -28,7 +29,7 @@
 
 .combo-box .list-cell{
     -fx-background-color: transparent;
-    -fx-border-width: 5px;
+    -fx-border-width: 3px;
     -fx-border-radius: 50px;
     -fx-text-fill: #FFFFFF;
     -fx-font-weight: bold;
@@ -37,14 +38,14 @@
 
 .combo-box .list-view {
     -fx-background-color: #3399CC;
-    -fx-border-width: 5px;
+    -fx-border-width: 3px;
     -fx-border-radius: 20px;
 }
 
 .combo-box .list-view:hover {
     -fx-cursor: hand;
     -fx-background-color: #3090CC;
-    -fx-border-width: 5px;
+    -fx-border-width: 3px;
     -fx-border-radius: 20px;
 }
 
@@ -86,6 +87,8 @@
     -fx-background-repeat: no-repeat;
     -fx-background-image: url("file:src/main/kotlin/view/assets/arrow.png");
     -fx-shape: "";
+    -fx-scale-x: 0.6; /* Mise à l'échelle horizontale */
+    -fx-scale-y: 0.6; /* Mise à l'échelle verticale */
 }
 
 
@@ -127,15 +130,17 @@
 
 
 .text-field {
-   -fx-padding: 10,5,10,5;
    -fx-background-border-width: 2;
    -fx-background-border: gone;
-   -fx-background-radius: 20;
+   -fx-background-radius: 25;
    -fx-background-border: grey;
    -fx-background-color: white;
    -fx-text-fill: black;
    -fx-pref-width: 100px;
-   -fx-pref-height: 25px;
+   -fx-pref-height: 30px;
+    -fx-padding: 10px 20px;
+    -fx-font-size: 20px;
+    -fx-text-fill: #3A83C2;
 }
 
 

@@ -18,6 +18,7 @@ import javafx.util.Duration
 class Pawn(value: Int) : StackPane() {
 
     var value = value
+    val thworm : Int
     init {
         val rectangle = Rectangle()
         rectangle.width = 86.0
@@ -68,7 +69,7 @@ class Pawn(value: Int) : StackPane() {
 
         // Image
         //diffinire le nombre de worm
-        val thworm : Int
+
         if (value < 25) {
             thworm = 1
         } else if (value < 29) {

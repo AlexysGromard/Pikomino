@@ -3,6 +3,7 @@ package modele
 import iut.info1.pickomino.data.DICE
 import iut.info1.pickomino.data.STATUS
 import iut.info1.pickomino.exceptions.IncorrectKeyException
+import javafx.scene.control.Label
 /**
  *Classe représentant un jeu.
  *

@@ -27,10 +27,15 @@ class CreateServer() : HomeCenter(false) {
     var button : WhiteButton
     init {
         val title = Title()
-        val subTitle = SubTitle("Draw the worms from the dice !")
+
+        val labelQuote = Label("Draw the worms from the dice !")
+        labelQuote.setTextFill(Color.web("#FFFFFF"))
+        val HelveFont = Font.loadFont("file:src/main/kotlin/view/fonts/helvetica/Helvetica.ttf", 20.0)
+        labelQuote.font = HelveFont
+
+
         val text = Label("How many players at most ?")
         text.font = Font("Helvetica", 24.0)
-
         text.textFill = Color.web("#FBFBF2")
 
         var hbox = HBox()
@@ -57,7 +62,7 @@ class CreateServer() : HomeCenter(false) {
         this.spacing = 20.0
 
         this.children.add(title)
-        this.children.add(subTitle)
+        this.children.add(labelQuote)
         this.children.add(text)
         this.children.add(hbox)
         this.children.add(button)

@@ -36,6 +36,8 @@ class Client(game: Game) {
     var cankeepDice = false
     var cankeepPICKO = false
 
+    var gameFinish = false
+
 
     /**
      * creation  du jeux avec ma class game et creation de la connection avec le seveur
@@ -76,23 +78,13 @@ class Client(game: Game) {
         }
     }
 
-    /**
-     * Rejoint une partie en se connectant à un serveur avec l'ID de la partie, la clé d'accès et le nombre de joueurs.
-     *
-     * @param id L'ID de la partie à rejoindre.
-     * @param key La clé d'accès pour rejoindre la partie.
-     * @param nbJoueur Le nombre de joueurs dans la partie.
-     */
     fun JoinGame(id:Int, key:Int,NbJoueur :Int){
-        // Établir une connexion avec le serveur
         this.connect = Connector.factory("172.26.82.76", "8080")
 
         // Définir les attributs de l'objet courant
         this.id = id
         this.key = key
-        this.nbJoueur = nbJoueur
-
-        // Marquer la connexion comme établie
+        this.nbJoueur = NbJoueur
         connected = true
     }
 
@@ -107,22 +99,21 @@ class Client(game: Game) {
             cankeepPICKO = false
 
 
-            // Récupère l'état actuel du jeu depuis le serveur
-            var currentGame = connect!!.gameState(this.id!!, this.key!!)
-            var ActualStatu =  currentGame.current.status
 
-            // Vérifie si le joueur actuel est le joueur local
-            if (currentGame.current.player+1 == game.numérojoueur){
-                // Vérifie l'état actuel du jeu et met à jour les variables canRoll, cankeepDice et cankeepPICKO en conséquence
-                if (( currentGame.current.status == STATUS.ROLL_DICE || currentGame.current.status == STATUS.ROLL_DICE_OR_TAKE_PICKOMINO)) {
-                    canRoll = true
-                }
-                if (currentGame.current.status == STATUS.KEEP_DICE){
-                    cankeepDice = true
-                }
-                if (currentGame.current.status == STATUS.ROLL_DICE_OR_TAKE_PICKOMINO || currentGame.current.status == STATUS.TAKE_PICKOMINO){
-                    cankeepPICKO = true
-                }
+                var currentGame = connect!!.gameState(this.id!!, this.key!!)
+
+                var ActualStatu =  currentGame.current.status
+
+                if (currentGame.current.player+1 == game.numérojoueur){
+                    if (( currentGame.current.status == STATUS.ROLL_DICE || currentGame.current.status == STATUS.ROLL_DICE_OR_TAKE_PICKOMINO)) {
+                        canRoll = true
+                    }
+                    if (currentGame.current.status == STATUS.KEEP_DICE){
+                        cankeepDice = true
+                    }
+                    if (currentGame.current.status == STATUS.ROLL_DICE_OR_TAKE_PICKOMINO || currentGame.current.status == STATUS.TAKE_PICKOMINO){
+                        cankeepPICKO = true
+                    }
 
             }
 
@@ -131,14 +122,19 @@ class Client(game: Game) {
                 game.setDice(currentGame.current.rolls,currentGame.current.keptDices)
                 game.setPickomino(currentGame.accessiblePickos())
 
-//              //Met à jour le Pickomino supérieur des autres joueurs non locaux
-                var playerList = game.playerList()
-                var pickominoOfplayer = currentGame.pickosStackTops()
-                for ( numj in 0..playerList.size-1){
-                    if (!playerList[numj].localPlayer && numj+1 != currentGame.current.player && pickominoOfplayer[numj] != 0)  playerList[numj].topPickominoIs(Pickomino(pickominoOfplayer[numj]))
 
+                    var playerList = game.playerList()
+                    var pickominoOfplayer = currentGame.pickosStackTops()
+                    for ( numj in 0..playerList.size-1){
+                        if (!playerList[numj].localPlayer && numj+1 != currentGame.current.player && pickominoOfplayer[numj] != 0)  playerList[numj].topPickominoIs(Pickomino(pickominoOfplayer[numj]))
+
+                    }
                 }
-            }
+
+                if(ActualStatu == STATUS.GAME_FINISHED){
+                    gameFinish = true
+                }
+
 
         }
     }

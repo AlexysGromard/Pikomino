@@ -51,7 +51,7 @@ class ControleurLancerPartie(vue : HomeView, mainvue : MainView) : EventHandler<
             else{
                 val id : Int = actualvue.id!!
                 val key : Int = actualvue.key!!
-                model.JoinGame(id,key,nbPlayer)
+                model.JoinGame(id,key,nbPlayer,actualPlayer)
             }
 
             val NewPage = GameView(nbPlayer,actualPlayer,model.id!!,model.key!!)
@@ -64,10 +64,10 @@ class ControleurLancerPartie(vue : HomeView, mainvue : MainView) : EventHandler<
     }
 
     fun updateLoop(vue: GameView, model : Client){
-        var ActuGameView = ActualiserGameView(vue,model)
+        var ActuGameView = ActualiserGameView(mainvue,vue,model)
         timeline = Timeline(KeyFrame(Duration.seconds(0.5), {
             ActuGameView.acctualiser()
-            //println(model.connect!!.gameState(model.id!!,model.key!!))
+            println(model.connect!!.gameState(model.id!!,model.key!!))
         }))
         timeline!!.cycleCount = Animation.INDEFINITE
         timeline!!.play()

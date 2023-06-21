@@ -55,7 +55,7 @@ class HomeView(stage: Stage,mainview: MainView): View() {
 
         var playbut = PlayButton(mainview,this)
         var rulesbutt = RulesContoleur(this)
-        var settingbutt = SettingsButton(this)
+        var settingbutt = SettingsButton(this, stage)
         var Quitbutt = QuitButton(this,stage)
         this.homcenter.fixeButton(arrayOf(playbut,rulesbutt,settingbutt,Quitbutt))
 

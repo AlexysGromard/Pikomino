@@ -86,6 +86,8 @@ class Player(numberPlayer:Int,localPlayer : Boolean) {
      * @param picko Le Pickomino à mettre à jour.
      */
     fun topPickominoIs(picko : Pickomino){
+
+
         if (picko in ListPickomino){
             if (picko != ListPickomino[ListPickomino.size-1]){
                 this.removeElement()
@@ -95,6 +97,15 @@ class Player(numberPlayer:Int,localPlayer : Boolean) {
         else{
             this.addElement(picko)
         }
+
+        if (picko.getValue() == 0 && ListPickomino.size != 0) {
+            this.removeElement()
+        }
+    }
+
+    fun allPickomino() : MutableList<Pickomino>{
+
+        return ListPickomino
     }
 
 

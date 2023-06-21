@@ -15,9 +15,13 @@ class Pickomino(value :Int) {
     private val nbWorms :Int    //Nombre de verre au Pickomino
 
     init {
-        //les valeur doit etre comprise entre 21 a 36 d'apres les regles
-        if (value >=21 &&  value <=36) this.value = value
-        else throw Exception()
+        if (value == 0) {
+            this.value = 0
+            nbWorms = 0
+        }
+        else{
+            if (value >=21 &&  value <=36) this.value = value
+            else throw Exception()
 
         //test du when
         nbWorms = when (value) {
