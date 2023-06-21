@@ -2,10 +2,12 @@ package view.endView
 
 import javafx.geometry.Pos
 import javafx.scene.control.Label
+import javafx.scene.layout.FlowPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
 import javafx.scene.text.Font
 import view.View
+import view.components.Dotted
 import view.components.Pawn
 
 class EndView(listpickominoPlayer: MutableList<MutableList<Pawn>>) : View() {
@@ -29,7 +31,7 @@ class EndView(listpickominoPlayer: MutableList<MutableList<Pawn>>) : View() {
         for (pickominoPlayer in  listpickominoPlayer){
 
             numj++
-            val vbocplayer = VBox()
+            val flowpain = FlowPane()
             val nomjoueur = Label("Player N°$numj")
             nomjoueur.styleClass.add("txt")
 
@@ -41,11 +43,15 @@ class EndView(listpickominoPlayer: MutableList<MutableList<Pawn>>) : View() {
                 hboxpicko.children.add(picko)
                 sum += picko.thworm
             }
-
-            vbocplayer.children.addAll(nomjoueur,hboxpicko)
+            if (sum == 0){
+                hboxpicko.children.add(Dotted(84.0, 163.0))
+            }
+            
+            flowpain.alignment = Pos.CENTER
+            flowpain.children.addAll(nomjoueur,hboxpicko)
             sumworm.add(sum)
-            vbocplayer.alignment = Pos.CENTER
-            vbox.children.add(vbocplayer)
+            flowpain.alignment = Pos.CENTER
+            vbox.children.add(flowpain)
         }
 
 
@@ -71,9 +77,10 @@ class EndView(listpickominoPlayer: MutableList<MutableList<Pawn>>) : View() {
             MessageVictoire = Label("Les ${joueurGagner} On Gagnés")
         }
         else{
-            MessageVictoire = Label("Le ${joueurGagner} a Gagnés")
+            MessageVictoire = Label("Le ${joueurGagner} a Gagné")
         }
         MessageVictoire.font = rulesFont
+        MessageVictoire.styleClass.add("txt")
         vbox.children.add(MessageVictoire)
         vbox.alignment = Pos.CENTER
 

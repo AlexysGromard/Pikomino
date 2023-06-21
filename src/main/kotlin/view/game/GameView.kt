@@ -92,6 +92,8 @@ class GameView(NombresJoueur : Int, actualNumberPlayer : Int , id :Int,key :Int)
 
         // HEADER Init
         this.headerCenter = VBox()
+        headerCenter.alignment = Pos.CENTER
+
         this.headerCenter.style = "-fx-alignment: center;"
 
         this.pageTitle = SmallTitle("Pickomino")
@@ -113,13 +115,24 @@ class GameView(NombresJoueur : Int, actualNumberPlayer : Int , id :Int,key :Int)
         headerRight.alignment = Pos.TOP_RIGHT
 
         val header = BorderPane()
+
         header.center = headerCenter
+
+        headerRight.prefWidth = 200.0
+
         header.right =  headerRight
+
+        val leftRegion = Region()
+        leftRegion.prefWidth = 200.0 // Définir la largeur préférée de la région LEFT
+        val leftStackPane = StackPane(leftRegion)
+        header.left = leftStackPane
+
         centerPart.top = header
 
         // LEFT : PlayerList
         playersList = VBox()
         playersList.padding = Insets(0.0, 240.0, 0.0 , 0.0)
+
 
         playersList.alignment = Pos.TOP_CENTER
 
