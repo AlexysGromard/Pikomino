@@ -16,7 +16,7 @@ class PlayerTest {
     fun countWorms2() {
         var player = Player(2,true)
         player.addElement(Pickomino(21))
-        player.addElement(Pickomino(21))
+        player.addElement(Pickomino(35))
         assertEquals(5,player.countWorms())
     }
 
@@ -39,7 +39,7 @@ class PlayerTest {
     fun removeElement() {
         var player = Player(2,true)
         var picko = Pickomino(21)
-        var picko2 = Pickomino(21)
+        var picko2 = Pickomino(22)
         player.addElement(picko)
         player.addElement(picko2)
         assertEquals(picko2,player.removeElement())

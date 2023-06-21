@@ -33,22 +33,34 @@ class PickominoTest {
     @Test
     fun test1_getnbWorms() {
         var pick =Pickomino(21)
-        assertEquals(0,pick.getnbWorm(),"Il n'a pas renvoyer la bonne valeur")
-
+        assertEquals(1,pick.getnbWorm(),"Il n'a pas renvoyer la bonne valeur")
     }
     @Test
     fun test2_getnbWorms() {
-        var pick =Pickomino(21)
-        assertEquals(5,pick.getnbWorm(),"Il n'a pas renvoyer la bonne valeur")
+        var pick =Pickomino(25)
+        assertEquals(2,pick.getnbWorm(),"Il n'a pas renvoyer la bonne valeur")
+    }
+
+    @Test
+    fun test3_getnbWorms() {
+        var pick =Pickomino(29)
+        assertEquals(3,pick.getnbWorm(),"Il n'a pas renvoyer la bonne valeur")
+    }
+
+
+    @Test
+    fun test4_getnbWorms() {
+        var pick =Pickomino(35)
+        assertEquals(4,pick.getnbWorm(),"Il n'a pas renvoyer la bonne valeur")
     }
     @Test
     fun test3_InitErrorWorms() {
-        assertThrows<Exception>{Pickomino(0)}
+        assertThrows<Exception>{Pickomino(10)}
     }
 
     @Test
     fun test4_InitErrorWorms() {
-        assertThrows<Exception>{Pickomino(0)}
+        assertThrows<Exception>{Pickomino(46)}
     }
 
 

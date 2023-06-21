@@ -47,13 +47,24 @@ class Client(game: Game) {
         }
     }
 
+    /**
+     * Rejoint une partie en se connectant à un serveur avec l'ID de la partie, la clé d'accès et le nombre de joueurs.
+     *
+     * @param id L'ID de la partie à rejoindre.
+     * @param key La clé d'accès pour rejoindre la partie.
+     * @param nbJoueur Le nombre de joueurs dans la partie.
+     */
     fun JoinGame(id:Int, key:Int,NbJoueur :Int){
+        // Établir une connexion avec le serveur
         this.connect = Connector.factory("172.26.82.76", "8080")
+
+        // Définir les attributs de l'objet courant
         this.id = id
         this.key = key
-        this.nbJoueur = NbJoueur
-        connected = true
+        this.nbJoueur = nbJoueur
 
+        // Marquer la connexion comme établie
+        connected = true
     }
 
     fun update(){
@@ -97,17 +108,38 @@ class Client(game: Game) {
         }
     }
 
-    fun keepDice(valeur : Int){
+    /**
+     * Garde un dé spécifié en convertissant sa valeur entière en dé réel à l'aide de la méthode convertIntintoDice().
+     * Si le dé n'a pas déjà été choisi, la fonction envoie la requête "keepDices" au serveur.
+     *
+     * @param valeur La valeur entière du dé à garder.
+     */
+    fun keepDice(valeur: Int) {
+        // Convertir la valeur entière en dé réel à l'aide de la méthode convertIntintoDice()
         val v = game.convertIntintoDice(valeur)
-        if (v !in game.diceChosen){
-            connect!!.keepDices(id!!,key!!,v)
+
+        // Vérifier si le dé n'a pas déjà été choisi
+        if (v !in game.diceChosen) {
+            // Envoyer la requête "keepDices" au serveur avec l'ID de la partie et la clé d'accès
+            connect!!.keepDices(id!!, key!!, v)
         }
     }
 
+    /**
+     * Garde un Pickomino spécifié en vérifiant s'il est présent soit dans la liste des Pickominos disponibles (getPickos()),
+     * soit dans la liste des Pickominos du joueur actuel (pickominoPlayer()).
+     * Si le Pickomino est présent dans l'une de ces listes, la fonction envoie la requête "takePickomino" au serveur.
+     *
+     * @param valeur La valeur du Pickomino à garder.
+     */
     fun keepPickomino(valeur :Int){
+        // Affiche les informations pour le débogage
         println("$valeur : ${game.getPickos()} : ${game.pickominoPlayer()}")
         println("${Pickomino(valeur) in game.getPickos()} :: ${Pickomino(valeur) in game.pickominoPlayer()}")
+
+        // Vérifie si le Pickomino est présent dans la liste des Pickominos disponibles ou dans la liste du joueur actuel
         if (Pickomino(valeur) in game.getPickos() || Pickomino(valeur) in game.pickominoPlayer()){
+            // Envoie la requête "takePickomino" au serveur avec l'ID de la partie, la clé d'accès et la valeur du Pickomino
             connect!!.takePickomino(id!!,key!!,valeur)
         }
 

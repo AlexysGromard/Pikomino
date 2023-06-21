@@ -2,7 +2,7 @@ package controleur.Game
 
 import iut.info1.pickomino.data.DICE
 import modele.Client
-import modele.Dice
+
 import view.game.GameView
 
 class ActualiserGameView(vue: GameView, model : Client) {

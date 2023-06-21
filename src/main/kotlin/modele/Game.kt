@@ -15,10 +15,12 @@ class Game(numérojoueur : Int) {
     var diceChosen = listOf<DICE>()
 
 
-
-
-
-    public fun preremplir() {
+    /**
+     * Initialise tout les pickomino present dans le jeu en l'ajoutant dans la listPickominosEnJeu
+     *
+     */
+    fun preremplir() {
+        // Ajoute les Pickominos avec des valeurs prédéfinies à la liste listPickominosEnJeu
         listPickominosEnJeu.add(Pickomino(21))
         listPickominosEnJeu.add(Pickomino(22))
         listPickominosEnJeu.add(Pickomino(23))
@@ -37,27 +39,47 @@ class Game(numérojoueur : Int) {
         listPickominosEnJeu.add(Pickomino(36))
     }
 
-    public fun isEmpty():Boolean {
+    /**
+     * verifie si la listPickominosEnJeu est equivaut a 0
+     *
+     * @return true si la liste est vide,sinon false .
+     */
+    fun isEmpty():Boolean {
         return listPickominosEnJeu.size ==0
     }
 
-    public fun addPlayer( player : Player) : Boolean{
+    /**
+     * rajoute un player dans listPlayer et renvoie vrai
+     *
+     * @return true si il n'est pas present dans la liste, sinon false.
+     */
+    fun addPlayer( player : Player) : Boolean{
+        // Vérifie si le joueur n'est pas déjà présent dans la liste listPlayer
         if (player !in this.listPlayer){
+            // Ajoute le joueur à la liste
             this.listPlayer.add(player)
             return true
         }
         return false
     }
 
-    public fun removeElement(Picko:Pickomino) {
 
+    /**
+     * supprime l'element en parametre de la liste listPickominosEnJeu
+     *
+     * @param Picko represente la pickomino qui est enlever de la liste
+     * @throws IncorrectKeyException si  listPickominosEnJeu.remove ne fonctionne pas est lance IndexOutOfBoundsException
+     */
+    fun removeElement(Picko:Pickomino) {
+        //teste si on peut suprimer l'element
         try {
+            //supprime l'element de la liste
             listPickominosEnJeu.remove(Picko)
         }
+
         catch (e:IndexOutOfBoundsException) {
             throw  IncorrectKeyException()
         }
-
     }
     fun playerList():MutableList<Player> {
         return listPlayer
