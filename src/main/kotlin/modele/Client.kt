@@ -9,6 +9,20 @@ import javafx.animation.Timeline
 import javafx.util.Duration
 import java.security.cert.TrustAnchor
 
+/**
+ *
+ *Classe représentant un client pour le jeu.
+ *
+ *@property game Le jeu auquel le client est associé.
+ *@property id L'ID du client.
+ *@property key La clé du client.
+ *@property connected Indique si le client est connecté ou non.
+ *@property connect Le connecteur utilisé par le client pour la communication.
+ *@property nbJoueur Le nombre de joueurs dans le jeu.
+ *@property canRoll Indique si le client peut lancer les dés.
+ *@property cankeepDice Indique si le client peut garder des dés.
+ *@property cankeepPICKO Indique si le client peut prendre un Pickomino.
+ */
 class Client(game: Game) {
 
     var id : Int? = null
@@ -23,26 +37,41 @@ class Client(game: Game) {
     var cankeepPICKO = false
 
 
-
+    /**
+     * creation  du jeux avec ma class game et creation de la connection avec le seveur
+     *
+     * @param nbJoueur  nombre de joueur dans la partie
+     * @param numJoueur id du joueur local
+     */
     fun CreateGame(nbJoueur : Int,numJoueur:Int){
         println("Hello students !!!")
+
+        //creation du serveur avec l'IP et le port
         this.connect = Connector.factory("172.26.82.76", "8080")
+        // verifie que l'objet existe
         if (connect != null){
+
+            //montre tout les partie present dans le serveur
             println("Parties actives sur le serveur = ${connect!!.listOfGameIds()}")
+
+            //parametrage de la nouvelle partie
             val identification = connect!!.newGame(nbJoueur)
+
+            // Initialise les variables id, key et nbJoueur avec les informations de la partie créée
             this.nbJoueur = nbJoueur
             this.id = identification.first
             this.key = identification.second
 
-            for ( numJ in 1..nbJoueur){
+            // Ajoute les joueurs à la partie en fonction de leur numéro, en marquant le joueur local
+            for (numJ in 1..nbJoueur){
                 if (numJ == numJoueur){
                     game.addPlayer(Player(numJ,true))
-                }
-                else{
+                }else{
                     game.addPlayer(Player(numJ,false))
                 }
             }
 
+            // Marque la connexion comme établie
             connected = true
         }
     }
@@ -67,43 +96,49 @@ class Client(game: Game) {
         connected = true
     }
 
+    /**
+     * Met a jour l'etat du jeu
+     */
     fun update(){
+        // Vérifie si les variables connected, id, key et connect ne sont pas nulles
         if (connected != null && id != null && key != null && connect != null){
             canRoll = false
             cankeepDice = false
             cankeepPICKO = false
 
 
+            // Récupère l'état actuel du jeu depuis le serveur
+            var currentGame = connect!!.gameState(this.id!!, this.key!!)
+            var ActualStatu =  currentGame.current.status
 
-                var currentGame = connect!!.gameState(this.id!!, this.key!!)
-
-                var ActualStatu =  currentGame.current.status
-
-                if (currentGame.current.player+1 == game.numérojoueur){
-                    if (( currentGame.current.status == STATUS.ROLL_DICE || currentGame.current.status == STATUS.ROLL_DICE_OR_TAKE_PICKOMINO)) {
-                        canRoll = true
-                    }
-                    if (currentGame.current.status == STATUS.KEEP_DICE){
-                        cankeepDice = true
-                    }
-                    if (currentGame.current.status == STATUS.ROLL_DICE_OR_TAKE_PICKOMINO || currentGame.current.status == STATUS.TAKE_PICKOMINO){
-                        cankeepPICKO = true
-                    }
-
+            // Vérifie si le joueur actuel est le joueur local
+            if (currentGame.current.player+1 == game.numérojoueur){
+                // Vérifie l'état actuel du jeu et met à jour les variables canRoll, cankeepDice et cankeepPICKO en conséquence
+                if (( currentGame.current.status == STATUS.ROLL_DICE || currentGame.current.status == STATUS.ROLL_DICE_OR_TAKE_PICKOMINO)) {
+                    canRoll = true
+                }
+                if (currentGame.current.status == STATUS.KEEP_DICE){
+                    cankeepDice = true
+                }
+                if (currentGame.current.status == STATUS.ROLL_DICE_OR_TAKE_PICKOMINO || currentGame.current.status == STATUS.TAKE_PICKOMINO){
+                    cankeepPICKO = true
                 }
 
-                else{
-                    game.setDice(currentGame.current.rolls,currentGame.current.keptDices)
-                    game.setPickomino(currentGame.accessiblePickos())
+            }
 
+            else{
+                // Met à jour les dés et les Pickominos du joueur local avec les informations du serveur
+                game.setDice(currentGame.current.rolls,currentGame.current.keptDices)
+                game.setPickomino(currentGame.accessiblePickos())
 
-                    var playerList = game.playerList()
-                    var pickominoOfplayer = currentGame.pickosStackTops()
-                    for ( numj in 0..playerList.size-1){
-                        if (!playerList[numj].localPlayer && numj+1 != currentGame.current.player && pickominoOfplayer[numj] != 0)  playerList[numj].topPickominoIs(Pickomino(pickominoOfplayer[numj]))
+//              //Met à jour le Pickomino supérieur des autres joueurs non locaux
+                var playerList = game.playerList()
+                var pickominoOfplayer = currentGame.pickosStackTops()
+                for ( numj in 0..playerList.size-1){
+                    if (!playerList[numj].localPlayer && numj+1 != currentGame.current.player && pickominoOfplayer[numj] != 0)  playerList[numj].topPickominoIs(Pickomino(pickominoOfplayer[numj]))
 
-                    }
                 }
+            }
 
         }
     }

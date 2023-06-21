@@ -1,33 +1,68 @@
 package modele
 
-
+/**
+ * Classe représentant un Pickomino.
+ *
+ * @param value La valeur attribuée au Pickomino.
+ *
+ * @property value Valeur attribuée au Pickomino.
+ * @property nbWorms Nombre de vers présents sur le Pickomino.
+ *
+ * @throws Exception si la valeur du Pickomino est en dehors de la plage valide.
+ */
 class Pickomino(value :Int) {
-    private val value :Int
-    private val nbWorms :Int
+    private val value :Int      //Valeur du Pickomino
+    private val nbWorms :Int    //Nombre de verre au Pickomino
 
     init {
+        //les valeur doit etre comprise entre 21 a 36 d'apres les regles
         if (value >=21 &&  value <=36) this.value = value
         else throw Exception()
 
-        if (value >=21 &&  value <=24) this.nbWorms = 1
-
-        else if (value >=25 &&  value <=28) this.nbWorms = 2
-        else if (value >=29 &&  value <=32) this.nbWorms = 3
-        else if (value >=33 &&  value <=36) this.nbWorms = 4
-        else throw Exception()
+        //test du when
+        nbWorms = when (value) {
+            in 21..24 -> 1
+            in 25..28 -> 2
+            in 29..32 -> 3
+            in 33..36 -> 4
+            else -> throw Exception("La valeur du Pickomino est en dehors de la plage valide.")
+        }
     }
 
-    fun getValue() :Int{
+    /**
+     * Renvoie la valeur du Pickomino.
+     *
+     * @return La valeur du Pickomino.
+     */
+    fun getValue(): Int {
         return this.value
     }
-    fun getnbWorm() :Int{
+
+    /**
+     * Renvoie le nombre de vers présents sur le Pickomino.
+     *
+     * @return Le nombre de vers présents sur le Pickomino.
+     */
+    fun getnbWorm(): Int {
         return this.nbWorms
     }
 
+    /**
+     * Renvoie une représentation sous forme de chaîne de caractères du Pickomino.
+     *
+     * @return La représentation du Pickomino en tant que chaîne de caractères.
+     */
     override fun toString(): String {
         return "$value"
     }
 
+    /**
+     * Vérifie si le Pickomino est égal à un autre objet donné.
+     *
+     * @param other L'objet avec lequel le Pickomino est comparé.
+     *
+     * @return true si les deux objets sont égaux, false sinon.
+     */
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
